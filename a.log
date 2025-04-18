@@ -1,0 +1,1071 @@
+>>> Generated data 67108864 lines used time 4.65743e-310ms.
+>>> Generated constant stride test conditions 3.1%	4.4%	5.4%	6.3%	7%	7.7%	8.3%	8.9%	9.4%	10%	
+>>> Generated low selection rate test conditions 0%	0%	0.1%	0.3%	1%	3.1%	
+>>> start projection calculation by Row-wise query processing model in cache with dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2303.07ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 3845.86ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3112.11ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 3502.59ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 5757.08ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 5464.32ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 6895.93ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 4466.92ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 5877.99ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 8069.24ms
+>>> start projection calculation by Row-wise query processing model in cache with fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1000.86ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1210.93ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1365.2ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1468.08ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1144.37ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1102.64ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1653.95ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1342.2ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1244.47ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1407.61ms
+>>> start projection calculation by Row-wise query processing model in cache with fixed vector final result in low selection rate test
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 674.205ms
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 718.62ms
+      column selection rate 0.1 %, total selection rate 0.0001%
+          Result count of selection rate 0% is 6744/67108864
+          Time: 643.739ms
+      column selection rate 0.3 %, total selection rate 0.0009%
+          Result count of selection rate 0% is 60616/67108864
+          Time: 656.3ms
+      column selection rate 1 %, total selection rate 0.01%
+          Result count of selection rate 0.0001% is 671218/67108864
+          Time: 771.283ms
+      column selection rate 3.1 %, total selection rate 0.0961%
+          Result count of selection rate 0.0009% is 6446043/67108864
+          Time: 1040.04ms
+>>> start projection calculation by Row-wise query processing model out of cache with dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 5544.39ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2390.73ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2587.88ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 3431.75ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4368.04ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 5146.93ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 5366.76ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 4413.14ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 7521.39ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7673.24ms
+>>> start projection calculation by Row-wise query processing model out of cache with fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1147.15ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1405.03ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1496.76ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1068.77ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1375.79ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1664.2ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1276.27ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1562.35ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1529.52ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1344.01ms
+>>> start projection calculation by Column-wise query processing model with early materialization strategy and dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1870.26ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2152.32ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2568.3ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2716.58ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2443.1ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1776.77ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 2530.85ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 3023.22ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 3582.5ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 3147.57ms
+>>> start projection calculation by Column-wise query processing model with early materialization strategy and fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1066.65ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1409.88ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1565.61ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1822.06ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2005.66ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1178.86ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1502.27ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 2083.21ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1540.95ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1640.53ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 6341.28ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 8147.25ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 10764.2ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 11558.8ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 13728.5ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 11659.1ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 9371.23ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 9903.73ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 11724.8ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 17163.3ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent dynamic vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 5920.24ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 8635.94ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 8643.64ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 10136.8ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 12549.1ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 10742ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 12995.2ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 12531ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 11744.1ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 14290.2ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 3250.7ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 4332.95ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 5612.5ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 8034.53ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 9466.83ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 8382.26ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 10169.8ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 12033.8ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 10958.7ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 13981.2ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2765.53ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 4234.9ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 4480.52ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 4311.4ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 5562.91ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 6402.33ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 6491.01ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 7180.77ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 6032.34ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7830.4ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent fixed vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2980.31ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 3560.54ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 4206.59ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 5402.81ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 5146.56ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 3991.09ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 6315.04ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 6893.63ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 7917.94ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7717.09ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent fixed vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1812.24ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2438.9ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2703.77ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2646.3ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2630.25ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 2764.39ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 2705.57ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 2533.21ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 2386.1ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 2133.75ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared fixed vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1336.91ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2373.31ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3062.79ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2402.29ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4361.15ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 4081.96ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 3448.94ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 3863.28ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 7100.06ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7760.96ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared fixed vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1007.65ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1348.2ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1590.89ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1715.43ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1735.13ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1772.24ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1832.62ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1713.34ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1875.82ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 2241.79ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent bitmap intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1942.54ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2602.57ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3320.34ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 3923.61ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4459.46ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 3782.71ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 5281.95ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 4786.79ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 5250.27ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7281.87ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and independent bitmap intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1344.82ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1579.84ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1772.61ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1736.42ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2048.84ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 2063.45ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1808.43ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 2009.67ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 2028.28ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1768.61ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2059.49ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 3054.68ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3433.7ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 4254.72ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4824.17ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 4910.12ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 4743.19ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 5454.5ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 4885.96ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 5564.7ms
+>>> start projection calculation by Column-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1170ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1839.16ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2077.96ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2015.89ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2105.55ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 2080.13ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1836.22ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1882.54ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1749.38ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1591.01ms
+>>> start projection calculation by Vector-wise query processing model with early materialization strategy and dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1374.45ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1879.96ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2373.78ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2748.27ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2937.28ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 2709.16ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 2839.51ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 2809.45ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 2891.19ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 3012.28ms
+>>> start projection calculation by Vector-wise query processing model with early materialization strategy and fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 961.079ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1321.34ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1555.84ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1710.03ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1667.45ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1379.55ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1348.81ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1558.55ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1634.84ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1838.96ms
+>>> start projection calculation by Vector-wise query processing model with early materialization strategy and fixed vector final result in low selection rate test
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 200.846ms
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 201.503ms
+      column selection rate 0.1 %, total selection rate 0.0001%
+          Result count of selection rate 0% is 6744/67108864
+          Time: 261.43ms
+      column selection rate 0.3 %, total selection rate 0.0009%
+          Result count of selection rate 0% is 60616/67108864
+          Time: 292.367ms
+      column selection rate 1 %, total selection rate 0.01%
+          Result count of selection rate 0.0001% is 671218/67108864
+          Time: 457.812ms
+      column selection rate 3.1 %, total selection rate 0.0961%
+          Result count of selection rate 0.0009% is 6446043/67108864
+          Time: 797.275ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 4674.86ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 6999.42ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 11255.4ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 12360.6ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 12647.5ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 13149.7ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 11270.2ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 14103.6ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 17884.5ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 15843.7ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent dynamic vector intermediate results and fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 5311.17ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 6750.29ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 9595.28ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 9775.19ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 10288.1ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 10202.6ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 10081.9ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 9255.9ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 9260.85ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 13210.7ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 3364.72ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 4738.81ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 6975.11ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 6196.47ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 7543.86ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 8447.87ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 7972.01ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 8707.3ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 9988.83ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 13383.4ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2445.04ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 4006.15ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 4310.77ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 4493.12ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4964.35ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 5083.6ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 5609.58ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 4290.86ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 5432.11ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 5184.71ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent fixed vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 2004.89ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2735.57ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 4265.01ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 5374.02ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 5847.89ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 6153.22ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 6730.47ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 6203.05ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 6440.68ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7167.84ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent fixed vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1702.84ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1939.47ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2411.92ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 2663.15ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 2590.7ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1856.14ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 2600.82ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 2364.17ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1494.23ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1676.12ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared fixed vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1435.51ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2569.11ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3600.63ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 4118.83ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4061.24ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 5048.07ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 6125.57ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 5939.61ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 6022.73ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 6443ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared fixed vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 872.655ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1323.91ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1512.16ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1528.38ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1245.77ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1494.05ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1406.82ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1797.3ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1783.92ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1488.92ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared fixed vector intermediate results as well as fixed vector final result
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 185.505ms
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 167.328ms
+      column selection rate 0.1 %, total selection rate 0.0001%
+          Result count of selection rate 0% is 6744/67108864
+          Time: 183.169ms
+      column selection rate 0.3 %, total selection rate 0.0009%
+          Result count of selection rate 0% is 60616/67108864
+          Time: 220.957ms
+      column selection rate 1 %, total selection rate 0.01%
+          Result count of selection rate 0.0001% is 671218/67108864
+          Time: 293.16ms
+      column selection rate 3.1 %, total selection rate 0.0961%
+          Result count of selection rate 0.0009% is 6446043/67108864
+          Time: 694.624ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent bitmap intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1754.44ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2449.24ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 2230.12ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 3389.45ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4504.2ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 4990.11ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 4926.41ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 5082.04ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 4968.45ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 7197.24ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent bitmap intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1229.12ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1158.49ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1404.39ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1746.29ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1940ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 1934.33ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1227.07ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1705.57ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1827.77ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1812.28ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and independent bitmap intermediate results as well as fixed vector final result in low selection rate test
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 1030.29ms
+      column selection rate 0 %, total selection rate 0%
+          Result count of selection rate 0% is 0/67108864
+          Time: 933.132ms
+      column selection rate 0.1 %, total selection rate 0.0001%
+          Result count of selection rate 0% is 6744/67108864
+          Time: 999.003ms
+      column selection rate 0.3 %, total selection rate 0.0009%
+          Result count of selection rate 0% is 60616/67108864
+          Time: 1134.34ms
+      column selection rate 1 %, total selection rate 0.01%
+          Result count of selection rate 0.0001% is 671218/67108864
+          Time: 1067.78ms
+      column selection rate 3.1 %, total selection rate 0.0961%
+          Result count of selection rate 0.0009% is 6446043/67108864
+          Time: 1237.71ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as dynamic vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1701.92ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 2558.36ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 3499.49ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 3374.1ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 4764.49ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 5287.85ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 4960.9ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 4704.38ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 6487.85ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 6289.55ms
+>>> start projection calculation by Vector-wise query processing model with late materialization strategy and shared dynamic vector intermediate results as well as fixed vector final result
+      column selection rate 3.1%, total selection rate 0.0961%
+          Result count of selection rate 0.0961% is 6446043/67108864
+          Time: 1244.83ms
+      column selection rate 4.4%, total selection rate 0.1936%
+          Result count of selection rate 0.1936% is 12988134/67108864
+          Time: 1742.13ms
+      column selection rate 5.4%, total selection rate 0.2916%
+          Result count of selection rate 0.2916% is 19565765/67108864
+          Time: 1881.27ms
+      column selection rate 6.3%, total selection rate 0.3969%
+          Result count of selection rate 0.3969% is 26631952/67108864
+          Time: 1709.08ms
+      column selection rate 7%, total selection rate 0.49%
+          Result count of selection rate 0.49% is 32885908/67108864
+          Time: 1822.19ms
+      column selection rate 7.7%, total selection rate 0.5929%
+          Result count of selection rate 0.5929% is 39785142/67108864
+          Time: 2075.76ms
+      column selection rate 8.3%, total selection rate 0.6889%
+          Result count of selection rate 0.6889% is 46228986/67108864
+          Time: 1932.63ms
+      column selection rate 8.9%, total selection rate 0.7921%
+          Result count of selection rate 0.7921% is 53156658/67108864
+          Time: 1769.63ms
+      column selection rate 9.4%, total selection rate 0.8836%
+          Result count of selection rate 0.8836% is 59298046/67108864
+          Time: 1684.58ms
+      column selection rate 10%, total selection rate 1%
+          Result count of selection rate 1% is 67108864/67108864
+          Time: 1625.24ms

@@ -1,0 +1,7 @@
+Branching type	Query processing model with different Intermediate Result Type	Lg(Selection rate)	Runtimes(ms)
+BRANCH_ONE_TWO_THREE	Row-wise query model	-6	213.646
+BRANCH_ONE_TWO_THREE	Row-wise query model	-5	231.875
+BRANCH_ONE_TWO_THREE	Row-wise query model	-4	230.342
+BRANCH_ONE_TWO_THREE	Row-wise query model	-3	276.053
+BRANCH_ONE_TWO_THREE	Row-wise query model	-2	394.708
+BRANCH_ONE_TWO_THREE	Row-wise query model	-1	747.272

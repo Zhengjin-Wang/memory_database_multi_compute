@@ -37,21 +37,75 @@ row_store_max row_max[67108864];
  * @param result
  * @return int the result count.
  */
+
+ int proalgo_rowwise_simd(int condition, const idx &size_R,
+  row_store_min *row_min,
+  std::vector<std::pair<int, int>> &result)
+{
+int count = 0;
+idx i = 0;
+__m512i v_cond = _mm512_set1_epi32(condition);
+
+// 假设row_store_min结构体是紧凑的，每个成员都是int类型
+// 处理16个元素一组的数据
+for (; i + 16 <= size_R; i += 16) {
+// 加载Ra值
+__m512i v_ra = _mm512_setr_epi32(
+row_min[i].Ra, row_min[i+1].Ra, row_min[i+2].Ra, row_min[i+3].Ra,
+row_min[i+4].Ra, row_min[i+5].Ra, row_min[i+6].Ra, row_min[i+7].Ra,
+row_min[i+8].Ra, row_min[i+9].Ra, row_min[i+10].Ra, row_min[i+11].Ra,
+row_min[i+12].Ra, row_min[i+13].Ra, row_min[i+14].Ra, row_min[i+15].Ra
+);
+
+// 加载Rc值
+__m512i v_rc = _mm512_setr_epi32(
+row_min[i].Rc, row_min[i+1].Rc, row_min[i+2].Rc, row_min[i+3].Rc,
+row_min[i+4].Rc, row_min[i+5].Rc, row_min[i+6].Rc, row_min[i+7].Rc,
+row_min[i+8].Rc, row_min[i+9].Rc, row_min[i+10].Rc, row_min[i+11].Rc,
+row_min[i+12].Rc, row_min[i+13].Rc, row_min[i+14].Rc, row_min[i+15].Rc
+);
+
+// 比较Ra和Rc是否都小于等于condition
+__mmask16 mask_ra = _mm512_cmple_epi32_mask(v_ra, v_cond);
+__mmask16 mask_rc = _mm512_cmple_epi32_mask(v_rc, v_cond);
+__mmask16 mask = _mm512_kand(mask_ra, mask_rc);
+
+// 处理满足条件的元素
+while (mask) {
+int idx = _tzcnt_u32(mask);
+result.emplace_back(row_min[i + idx].Ra, row_min[i + idx].Rc);
+count++;
+mask = mask & (mask-1);
+}
+}
+
+// 处理剩余的元素
+for (; i < size_R; ++i) {
+if (row_min[i].Ra <= condition && row_min[i].Rc <= condition) {
+count++;
+result.emplace_back(row_min[i].Ra, row_min[i].Rc);
+}
+}
+
+return count;
+}
+
 int proalgo_rowwise(int condition, const idx &size_R,
                     row_store_min *row_min,
                     std::vector<std::pair<int, int>> &result)
 {
-  int count = 0;
-  idx i;
-  idx result_size = size_R;
-  for (i = 0; i != result_size; ++i)
-  {
-    if (row_min[i].Ra <= condition && row_min[i].Rc <= condition)
-    {
-      count++;
-      result.emplace_back(row_min[i].Ra, row_min[i].Rc);
-    }
-  }
+  // int count = 0;
+  // idx i;
+  // idx result_size = size_R;
+  // for (i = 0; i != result_size; ++i)
+  // {
+  //   if (row_min[i].Ra <= condition && row_min[i].Rc <= condition)
+  //   {
+  //     count++;
+  //     result.emplace_back(row_min[i].Ra, row_min[i].Rc);
+  //   }
+  // }
+  int count = proalgo_rowwise_simd(condition, size_R, row_min, result);
   return count;
 }
 /**
@@ -157,10 +211,6 @@ __m512i v_cond = _mm512_set1_epi32(condition);
 // 第一次扫描: 处理Ra
 for (; read_idx + 16 <= size_R; read_idx += 16) {
 __m512i v_ra = _mm512_loadu_si512((__m512i*)(Ra + read_idx));
-__m512i v_idx = _mm512_set_epi32(read_idx+15, read_idx+14, read_idx+13, read_idx+12,
-                       read_idx+11, read_idx+10, read_idx+9, read_idx+8,
-                       read_idx+7, read_idx+6, read_idx+5, read_idx+4,
-                       read_idx+3, read_idx+2, read_idx+1, read_idx);
 
 __mmask16 mask = _mm512_cmple_epi32_mask(v_ra, v_cond);
 while (mask) {
@@ -172,7 +222,7 @@ result[write_idx].second = Ra[read_idx + idx]; // value1
 ++write_idx;
 //std::cout << "before kand" << std::endl;
 //std::cout << __tzcnt_u16(mask)<< std::endl;
-mask = _mm512_kand(mask, _mm512_knot(1 << idx));
+mask = mask & (mask-1);
 //std::cout << "after kand" << std::endl;
 }
 }
@@ -209,7 +259,7 @@ auto cur_pos = result[read_idx + idx + pre_size].first;
 result[final_write_idx].first = result[cur_pos + pre_size].second;  // value 1
 result[final_write_idx].second = Rc[cur_pos];                       // value 2
 ++final_write_idx;
-  mask = _mm512_kand(mask, _mm512_knot(1 << idx));
+  mask = mask & (mask-1);
 }
 }
 
@@ -311,6 +361,84 @@ int proalgo_cwm_em(int condition, const idx &size_R,
 
   return write_idx;
 }
+
+int proalgo_cwm_lm_idv_simd(int condition, const idx &size_R,
+                       const int *Ra,
+                       const int *Rc,
+                       std::vector<int> &pos1, std::vector<int> &pos2,
+                       std::vector<std::pair<int, int>> &result)
+{
+    idx i = 0;
+    __m512i v_cond = _mm512_set1_epi32(condition);
+
+    // 第一步：过滤Ra
+    for (; i + 16 <= size_R; i += 16) {
+        __m512i v_ra = _mm512_loadu_si512((__m512i*)(Ra + i));
+
+        __mmask16 mask = _mm512_cmple_epi32_mask(v_ra, v_cond);
+
+        while (mask) {
+            int idx = _tzcnt_u32(mask);
+            pos1.emplace_back(i + idx);
+            mask = mask & (mask-1);
+        }
+    }
+
+    // 处理Ra剩余元素
+    for (; i < size_R; ++i) {
+        if (Ra[i] <= condition) {
+            pos1.emplace_back(i);
+        }
+    }
+
+    // 第二步：过滤Rc
+    i = 0;
+    for (; i + 16 <= size_R; i += 16) {
+        __m512i v_rc = _mm512_loadu_si512((__m512i*)(Rc + i));
+
+        __mmask16 mask = _mm512_cmple_epi32_mask(v_rc, v_cond);
+
+        while (mask) {
+            int idx = _tzcnt_u32(mask);
+            pos2.emplace_back(i + idx);
+            mask = mask & (mask-1);
+        }
+    }
+
+    // 处理Rc剩余元素
+    for (; i < size_R; ++i) {
+        if (Rc[i] <= condition) {
+            pos2.emplace_back(i);
+        }
+    }
+
+    // 第三步：合并结果（保持原有的合并逻辑，因为这部分不适合SIMD优化）
+    idx merge_idx = 0;
+    idx j = 0;
+    for (i = 0, j = 0; i < pos1.size() && j < pos2.size();) {
+        if (pos1[i] == pos2[j]) {
+            pos1[merge_idx] = pos1[i];
+            ++i;
+            ++j;
+            ++merge_idx;
+        }
+        else if (pos1[i] > pos2[j]) {
+            ++j;
+        }
+        else {
+            ++i;
+        }
+    }
+
+    // 构建最终结果
+    for (i = 0; i != merge_idx; ++i) {
+        auto cur_pos = pos1[i];
+        result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
+    }
+
+    return result.size();
+}
+
 /**
  * @brief projection calculation
  *        calculate one column in one run with late materialization strategy and independent dynamic vector intermediate results as well as dynamic vector final result
@@ -331,51 +459,51 @@ int proalgo_cwm_lm_idv(int condition, const idx &size_R,
                        std::vector<std::pair<int, int>> &result)
 {
 
-  idx i, j;
-  for (i = 0; i < size_R; ++i)
-  {
-    if (Ra[i] <= condition)
-    {
-      pos1.emplace_back(i);
-    }
-  }
+//  idx i, j;
+//  for (i = 0; i < size_R; ++i)
+//  {
+//    if (Ra[i] <= condition)
+//    {
+//      pos1.emplace_back(i);
+//    }
+//  }
+//
+//  for (i = 0; i < size_R; ++i)
+//  {
+//    if (Rc[i] <= condition)
+//    {
+//      pos2.emplace_back(i);
+//    }
+//  }
+//
+//  idx merge_idx = 0;
+//  for (i = 0, j = 0; i < pos1.size() && j < pos2.size();)
+//  {
+//    if (pos1[i] == pos2[j])
+//    {
+//      pos1[merge_idx] = pos1[i];
+//      ++i;
+//      ++j;
+//      ++merge_idx;
+//    }
+//    else if (pos1[i] > pos2[j])
+//    {
+//      ++j;
+//    }
+//    else
+//    {
+//      // if pos1[i] < pos2[j]
+//      ++i;
+//    }
+//  }
+//
+//  for (i = 0; i != merge_idx; ++i)
+//  {
+//    auto cur_pos = pos1[i];
+//    result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
+//  }
 
-  for (i = 0; i < size_R; ++i)
-  {
-    if (Rc[i] <= condition)
-    {
-      pos2.emplace_back(i);
-    }
-  }
-
-  idx merge_idx = 0;
-  for (i = 0, j = 0; i < pos1.size() && j < pos2.size();)
-  {
-    if (pos1[i] == pos2[j])
-    {
-      pos1[merge_idx] = pos1[i];
-      ++i;
-      ++j;
-      ++merge_idx;
-    }
-    else if (pos1[i] > pos2[j])
-    {
-      ++j;
-    }
-    else
-    {
-      // if pos1[i] < pos2[j]
-      ++i;
-    }
-  }
-
-  for (i = 0; i != merge_idx; ++i)
-  {
-    auto cur_pos = pos1[i];
-    result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
-  }
-
-  return result.size();
+  return proalgo_cwm_lm_idv_simd(condition, size_R, Ra, Rc, pos1, pos2, result);
 }
 /**
  * @brief projection calculation
@@ -536,6 +664,83 @@ int proalgo_cwm_lm_sdv(int condition, const idx &size_R,
 
   return cur_size;
 }
+int proalgo_cwm_lm_ifv_simd(int condition, const idx &size_R,
+  const int *Ra,
+  const int *Rc,
+  int *pos1, int *pos2,
+  std::vector<std::pair<int, int>> &result)
+{
+idx pos1_idx = 0, pos2_idx = 0;
+idx i = 0;
+__m512i v_cond = _mm512_set1_epi32(condition);
+
+// 第一步：过滤Ra
+for (; i + 16 <= size_R; i += 16) {
+__m512i v_ra = _mm512_loadu_si512((__m512i*)(Ra + i));
+__mmask16 mask = _mm512_cmple_epi32_mask(v_ra, v_cond);
+
+while (mask) {
+int idx = _tzcnt_u32(mask);
+pos1[pos1_idx++] = i + idx;
+mask = mask & (mask-1);
+}
+}
+
+// 处理Ra剩余元素
+for (; i < size_R; ++i) {
+if (Ra[i] <= condition) {
+pos1[pos1_idx++] = i;
+}
+}
+
+// 第二步：过滤Rc
+i = 0;
+for (; i + 16 <= size_R; i += 16) {
+__m512i v_rc = _mm512_loadu_si512((__m512i*)(Rc + i));
+__mmask16 mask = _mm512_cmple_epi32_mask(v_rc, v_cond);
+
+while (mask) {
+int idx = _tzcnt_u32(mask);
+pos2[pos2_idx++] = i + idx;
+mask = mask & (mask-1);
+}
+}
+
+// 处理Rc剩余元素
+for (; i < size_R; ++i) {
+if (Rc[i] <= condition) {
+pos2[pos2_idx++] = i;
+}
+}
+
+// 第三步：合并结果（保持原有的合并逻辑）
+idx merge_idx = 0;
+idx j = 0;
+for (i = 0, j = 0; i < pos1_idx && j < pos2_idx;) {
+if (pos1[i] == pos2[j]) {
+pos1[merge_idx] = pos1[i];
+++i;
+++j;
+++merge_idx;
+}
+else if (pos1[i] > pos2[j]) {
+++j;
+}
+else {
+++i;
+}
+}
+
+// 构建最终结果
+result.clear();
+result.reserve(merge_idx);  // 预分配空间
+for (i = 0; i != merge_idx; ++i) {
+auto cur_pos = pos1[i];
+result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
+}
+
+return result.size();
+}
 /**
  * @brief projection calculation
  *        calculate one column in one run with late materialization strategy and independent fixed vector intermediate results as well as dynamic vector final result
@@ -555,53 +760,53 @@ int proalgo_cwm_lm_ifv(int condition, const idx &size_R,
                        int *pos1, int *pos2,
                        std::vector<std::pair<int, int>> &result)
 {
-  idx pos1_idx, pos2_idx, i, j;
-  for (i = 0, pos1_idx = 0; i < size_R; ++i)
-  {
-    if (Ra[i] <= condition)
-    {
-      pos1[pos1_idx] = i;
-      ++pos1_idx;
-    }
-  }
+  // idx pos1_idx, pos2_idx, i, j;
+  // for (i = 0, pos1_idx = 0; i < size_R; ++i)
+  // {
+  //   if (Ra[i] <= condition)
+  //   {
+  //     pos1[pos1_idx] = i;
+  //     ++pos1_idx;
+  //   }
+  // }
 
-  for (i = 0, pos2_idx = 0; i < size_R; ++i)
-  {
-    if (Rc[i] <= condition)
-    {
-      pos2[pos2_idx] = i;
-      ++pos2_idx;
-    }
-  }
+  // for (i = 0, pos2_idx = 0; i < size_R; ++i)
+  // {
+  //   if (Rc[i] <= condition)
+  //   {
+  //     pos2[pos2_idx] = i;
+  //     ++pos2_idx;
+  //   }
+  // }
 
-  idx merge_idx = 0;
-  for (i = 0, j = 0; i < pos1_idx && j < pos2_idx;)
-  {
-    if (pos1[i] == pos2[j])
-    {
-      pos1[merge_idx] = pos1[i];
-      ++i;
-      ++j;
-      ++merge_idx;
-    }
-    else if (pos1[i] > pos2[j])
-    {
-      ++j;
-    }
-    else
-    {
-      // if pos1[i] < pos2[j]
-      ++i;
-    }
-  }
+  // idx merge_idx = 0;
+  // for (i = 0, j = 0; i < pos1_idx && j < pos2_idx;)
+  // {
+  //   if (pos1[i] == pos2[j])
+  //   {
+  //     pos1[merge_idx] = pos1[i];
+  //     ++i;
+  //     ++j;
+  //     ++merge_idx;
+  //   }
+  //   else if (pos1[i] > pos2[j])
+  //   {
+  //     ++j;
+  //   }
+  //   else
+  //   {
+  //     // if pos1[i] < pos2[j]
+  //     ++i;
+  //   }
+  // }
 
-  for (i = 0; i != merge_idx; ++i)
-  {
-    auto cur_pos = pos1[i];
-    result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
-  }
+  // for (i = 0; i != merge_idx; ++i)
+  // {
+  //   auto cur_pos = pos1[i];
+  //   result.emplace_back(Ra[cur_pos], Rc[cur_pos]);
+  // }
 
-  return result.size();
+  return proalgo_cwm_lm_ifv_simd(condition, size_R, Ra, Rc, pos1, pos2, result);
 }
 /**
  * @brief projection calculation
@@ -769,6 +974,84 @@ int proalgo_cwm_lm_sfv(int condition, const idx &size_R,
 
   return pos2_idx;
 }
+int proalgo_cwm_lm_ibmp_simd(int condition, const idx &size_R,
+  const int *Ra,
+  const int *Rc,
+  bool *bitmap1, bool *bitmap2,
+  std::vector<std::pair<int, int>> &result)
+{
+idx i = 0;
+__m512i v_cond = _mm512_set1_epi32(condition);
+
+// 处理Ra，生成bitmap1
+for (; i + 16 <= size_R; i += 16) {
+__m512i v_ra = _mm512_loadu_si512((__m512i*)(Ra + i));
+__mmask16 mask = _mm512_cmple_epi32_mask(v_ra, v_cond);
+
+// 将16位掩码转换为16个bool值
+__m128i expanded_mask = _mm_maskz_set1_epi8(mask, 1);
+_mm_storeu_si128((__m128i*)(bitmap1 + i), expanded_mask);
+}
+
+// 处理剩余元素
+for (; i < size_R; ++i) {
+bitmap1[i] = (Ra[i] <= condition);
+}
+
+// 处理Rc，生成bitmap2
+i = 0;
+for (; i + 16 <= size_R; i += 16) {
+__m512i v_rc = _mm512_loadu_si512((__m512i*)(Rc + i));
+__mmask16 mask = _mm512_cmple_epi32_mask(v_rc, v_cond);
+
+__m128i expanded_mask = _mm_maskz_set1_epi8(mask, 1);
+_mm_storeu_si128((__m128i*)(bitmap2 + i), expanded_mask);
+}
+
+// 处理剩余元素
+for (; i < size_R; ++i) {
+bitmap2[i] = (Rc[i] <= condition);
+}
+
+// 合并两个bitmap
+i = 0;
+for (; i + 16 <= size_R; i += 16) {
+__m128i v_bitmap1 = _mm_loadu_si128((__m128i*)(bitmap1 + i));
+__m128i v_bitmap2 = _mm_loadu_si128((__m128i*)(bitmap2 + i));
+__m128i v_result = _mm_and_si128(v_bitmap1, v_bitmap2);
+_mm_storeu_si128((__m128i*)(bitmap1 + i), v_result);
+}
+
+// 处理剩余元素
+for (; i < size_R; ++i) {
+bitmap1[i] = bitmap1[i] & bitmap2[i];
+}
+
+// 收集结果
+result.clear();
+result.reserve(size_R); // 预分配空间避免频繁重分配
+
+i = 0;
+for (; i + 16 <= size_R; i += 16) {
+__m128i v_bitmap = _mm_loadu_si128((__m128i*)(bitmap1 + i));
+uint16_t mask = _mm_movemask_epi8(v_bitmap);
+
+while (mask) {
+int idx = _tzcnt_u32(mask);
+result.emplace_back(Ra[i + idx], Rc[i + idx]);
+mask = mask & ~(1 << idx);
+}
+}
+
+// 处理剩余元素
+for (; i < size_R; ++i) {
+if (bitmap1[i]) {
+result.emplace_back(Ra[i], Rc[i]);
+}
+}
+
+return result.size();
+}
 /**
  * @brief projection calculation
  *        calculate one column in one run with late materialization strategy and independent bitmap intermediate results as well as dynamic vector final result
@@ -788,31 +1071,31 @@ int proalgo_cwm_lm_ibmp(int condition, const idx &size_R,
                         bool *bitmap1, bool *bitmap2,
                         std::vector<std::pair<int, int>> &result)
 {
-  idx i;
-  for (i = 0; i != size_R; ++i)
-  {
-    bitmap1[i] = (Ra[i] <= condition);
-  }
+  // idx i;
+  // for (i = 0; i != size_R; ++i)
+  // {
+  //   bitmap1[i] = (Ra[i] <= condition);
+  // }
 
-  for (i = 0; i != size_R; ++i)
-  {
-    bitmap2[i] = (Rc[i] <= condition);
-  }
+  // for (i = 0; i != size_R; ++i)
+  // {
+  //   bitmap2[i] = (Rc[i] <= condition);
+  // }
 
-  for (i = 0; i != size_R; ++i)
-  {
-    bitmap1[i] = (bitmap1[i] & bitmap2[i]);
-  }
+  // for (i = 0; i != size_R; ++i)
+  // {
+  //   bitmap1[i] = (bitmap1[i] & bitmap2[i]);
+  // }
 
-  for (i = 0; i != size_R; ++i)
-  {
-    if (bitmap1[i])
-    {
-      result.emplace_back(Ra[i], Rc[i]);
-    }
-  }
+  // for (i = 0; i != size_R; ++i)
+  // {
+  //   if (bitmap1[i])
+  //   {
+  //     result.emplace_back(Ra[i], Rc[i]);
+  //   }
+  // }
 
-  return result.size();
+  return proalgo_cwm_lm_ibmp_simd(condition,size_R,Ra,Rc,bitmap1,bitmap2,result);
 }
 /**
  * @brief projection calculation
@@ -2482,7 +2765,7 @@ void test_proalgo(const idx &size_R,
                   std::ofstream &proalgo_lsr_timefile)
 {
   /*1.Row-wise query processing model*/
-   test_proalgo_rowwise_model(DATA_NUM, row_min, row_max, conditions, conditions_lsr, proalgo_timefile, proalgo_lsr_timefile);
+  test_proalgo_rowwise_model(DATA_NUM, row_min, row_max, conditions, conditions_lsr, proalgo_timefile, proalgo_lsr_timefile);
   /*2.Column-wise query processing model*/
   test_proalgo_columnwise_model(DATA_NUM, Ra, Rc, conditions, proalgo_timefile);
   /*3.Vector-wise query processing model*/

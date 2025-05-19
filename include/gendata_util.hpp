@@ -1,11 +1,18 @@
 #ifndef Gendata_H
 #define Gendata_H
 
+#include <arrow/api.h>
+#include <arrow/table.h>
+#include <arrow/builder.h>
+#include <arrow/status.h>
+#include <arrow/io/api.h>
+#include <parquet/arrow/writer.h>
 #include "metadata.h"
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <random>
 #include <string.h>
 #include <cstdlib>
 #include <ctime>
@@ -537,6 +544,167 @@ int gen_data(const double& rate, const double& SF, int8_t* &dimvec_c, int8_t* &d
     std::cout << ">>> Generated data " << size_lineorder <<  " lines in lineorder table used time " << ms << "ms." << std::endl;
     return 0;
 }
+
+// 生成 Arrow Table（五张表分别生成）
+std::vector<std::shared_ptr<arrow::Table>> gen_data_arrow(const double& c_sele, const double& s_sele, const double& p_sele, const double& d_sele,
+             const double& SF, const int& c_bitmap, const int &s_bitmap, const int &p_bitmap, const int &d_bitmap,
+             const int &c_groups, const int &s_groups, const int &p_groups, const int &d_groups) {
+    
+    // 计算各表大小
+    int size_customer = size_of_table(TABLE_NAME::customer, SF);
+    int size_supplier = size_of_table(TABLE_NAME::supplier, SF);
+    int size_part = size_of_table(TABLE_NAME::part, SF);
+    int size_date = size_of_table(TABLE_NAME::date, SF);
+    int size_lineorder = size_of_table(TABLE_NAME::lineorder, SF);
+
+    // 生成 customer 表
+    auto dimvec_c = std::make_shared<arrow::Int8Builder>();
+    if (c_bitmap) {
+        for (int i = 0; i < size_customer; ++i) {
+            dimvec_c->Append(rand_x(0.0, 1.0) <= c_sele ? 
+                static_cast<int8_t>(rand_x(0, c_groups - 1)) : DIM_NULL);
+        }
+    } else {
+        for (int i = 0; i < size_customer; ++i) {
+            dimvec_c->Append(rand_x(0.0, 1.0) <= c_sele ? 0 : DIM_NULL);
+        }
+    }
+
+    // 生成 supplier 表
+    auto dimvec_s = std::make_shared<arrow::Int8Builder>();
+    if (s_bitmap) {
+        for (int i = 0; i < size_supplier; ++i) {
+            dimvec_s->Append(rand_x(0.0, 1.0) <= s_sele ? 
+                static_cast<int8_t>(rand_x(0, s_groups - 1)) : DIM_NULL);
+        }
+    } else {
+        for (int i = 0; i < size_supplier; ++i) {
+            dimvec_s->Append(rand_x(0.0, 1.0) <= s_sele ? 0 : DIM_NULL);
+        }
+    }
+
+    // 生成 part 表
+    auto dimvec_p = std::make_shared<arrow::Int8Builder>();
+    if (p_bitmap) {
+        for (int i = 0; i < size_part; ++i) {
+            dimvec_p->Append(rand_x(0.0, 1.0) <= p_sele ? 
+                static_cast<int8_t>(rand_x(0, p_groups - 1)) : DIM_NULL);
+        }
+    } else {
+        for (int i = 0; i < size_part; ++i) {
+            dimvec_p->Append(rand_x(0.0, 1.0) <= p_sele ? 0 : DIM_NULL);
+        }
+    }
+
+    // 生成 date 表
+    auto dimvec_d = std::make_shared<arrow::Int8Builder>();
+    if (d_bitmap) {
+        for (int i = 0; i < size_date; ++i) {
+            dimvec_d->Append(rand_x(0.0, 1.0) <= d_sele ? 
+                static_cast<int8_t>(rand_x(0, d_groups - 1)) : DIM_NULL);
+        }
+    } else {
+        for (int i = 0; i < size_date; ++i) {
+            dimvec_d->Append(rand_x(0.0, 1.0) <= d_sele ? 0 : DIM_NULL);
+        }
+    }
+
+    // 生成 lineorder 表
+    auto fk_c = std::make_shared<arrow::Int32Builder>();
+    auto fk_s = std::make_shared<arrow::Int32Builder>();
+    auto fk_p = std::make_shared<arrow::Int32Builder>();
+    auto fk_d = std::make_shared<arrow::Int32Builder>();
+    auto M1 = std::make_shared<arrow::Int32Builder>();
+    auto M2 = std::make_shared<arrow::Int32Builder>();
+
+    for (int i = 0; i < size_lineorder; ++i) {
+        fk_c->Append(rand_x(0, size_customer - 1));
+        fk_s->Append(rand_x(0, size_supplier - 1));
+        fk_p->Append(rand_x(0, size_part - 1));
+        fk_d->Append(rand_x(0, size_date - 1));
+        M1->Append(5);
+        M2->Append(5);
+    }
+
+    // 构建 Arrow Arrays
+    std::shared_ptr<arrow::Array> dimvec_c_array, dimvec_s_array, dimvec_p_array, dimvec_d_array;
+    dimvec_c->Finish(&dimvec_c_array);
+    dimvec_s->Finish(&dimvec_s_array);
+    dimvec_p->Finish(&dimvec_p_array);
+    dimvec_d->Finish(&dimvec_d_array);
+
+    std::shared_ptr<arrow::Array> fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array;
+    fk_c->Finish(&fk_c_array);
+    fk_s->Finish(&fk_s_array);
+    fk_p->Finish(&fk_p_array);
+    fk_d->Finish(&fk_d_array);
+    M1->Finish(&M1_array);
+    M2->Finish(&M2_array);
+
+    // 构建五张表的 Schema 和 Table
+    std::vector<std::shared_ptr<arrow::Table>> tables;
+
+    // customer 表
+    auto customer_schema = arrow::schema({
+        arrow::field("c_dim", arrow::int8())
+    });
+    std::vector<std::shared_ptr<arrow::Array>> customer_arrays = {dimvec_c_array};
+    tables.push_back(arrow::Table::Make(customer_schema, customer_arrays));
+
+    // supplier 表
+    auto supplier_schema = arrow::schema({
+        arrow::field("s_dim", arrow::int8())
+    });
+    std::vector<std::shared_ptr<arrow::Array>> supplier_arrays = {dimvec_s_array};
+    tables.push_back(arrow::Table::Make(supplier_schema, supplier_arrays));
+
+    // part 表
+    auto part_schema = arrow::schema({
+        arrow::field("p_dim", arrow::int8())
+    });
+    std::vector<std::shared_ptr<arrow::Array>> part_arrays = {dimvec_p_array};
+    tables.push_back(arrow::Table::Make(part_schema, part_arrays));
+
+    // date 表
+    auto date_schema = arrow::schema({
+        arrow::field("d_dim", arrow::int8())
+    });
+    std::vector<std::shared_ptr<arrow::Array>> date_arrays = {dimvec_d_array};
+    tables.push_back(arrow::Table::Make(date_schema, date_arrays));
+
+    // lineorder 表
+    auto lineorder_schema = arrow::schema({
+        arrow::field("fk_c", arrow::int32()),
+        arrow::field("fk_s", arrow::int32()),
+        arrow::field("fk_p", arrow::int32()),
+        arrow::field("fk_d", arrow::int32()),
+        arrow::field("M1", arrow::int32()),
+        arrow::field("M2", arrow::int32())
+    });
+    std::vector<std::shared_ptr<arrow::Array>> lineorder_arrays = {
+        fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array
+    };
+    tables.push_back(arrow::Table::Make(lineorder_schema, lineorder_arrays));
+
+    return tables;
+}
+
+void write_parquet(const std::shared_ptr<arrow::Table>& table, const std::string& filename) {
+    // 打开文件
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    PARQUET_ASSIGN_OR_THROW(
+        outfile,
+        arrow::io::FileOutputStream::Open(filename)
+    );
+
+    // 写入 Parquet
+    PARQUET_THROW_NOT_OK(
+        parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), outfile)
+    );
+
+    std::cout << "Parquet file written successfully: " << filename << std::endl;
+}
+
 /**
  * @brief generate test data for OLAPcore test
  * 
@@ -571,100 +739,109 @@ int gen_data(const double& c_sele, const double& s_sele, const double& p_sele, c
              int8_t* &dimvec_c, int8_t* &dimvec_s, int8_t* &dimvec_p, int8_t* &dimvec_d, 
              int32_t* &fk_c, int32_t* &fk_s, int32_t* &fk_p, int32_t* &fk_d,
              int32_t * &M1, int32_t * &M2) {
-    timeval start, end;
-    double ms;
-    int size_customer = size_of_table(TABLE_NAME::customer, SF);
-    int size_supplier = size_of_table(TABLE_NAME::supplier, SF);
-    int size_part = size_of_table(TABLE_NAME::part, SF);
-    int size_date = size_of_table(TABLE_NAME::date, SF);
-    dimvec_c = new int8_t[size_customer];
-    dimvec_s = new int8_t[size_supplier];
-    dimvec_p = new int8_t[size_part];
-    dimvec_d = new int8_t[size_date];
-    int size_lineorder = size_of_table(TABLE_NAME::lineorder, SF);
-    fk_c = new int32_t[size_lineorder];
-    fk_s = new int32_t[size_lineorder];
-    fk_p = new int32_t[size_lineorder];
-    fk_d = new int32_t[size_lineorder];
-    M1 = new int32_t[size_lineorder];
-    M2 = new int32_t[size_lineorder];
 
-
-    gettimeofday(&start, NULL);
-    srand(time(NULL));
-
-    // generate data for customer table
-    if (c_bitmap)
-    {
-        for(size_t i = 0; i != size_customer; ++i){
-          dimvec_c[i] = rand_x(0.0, 1.0) <= c_sele ? (int8_t)rand_x(0, c_groups - 1) : DIM_NULL;
-      }
-    }
-    else
-    {
-      for(size_t i = 0; i != size_customer; ++i){
-          dimvec_c[i] = rand_x(0.0, 1.0) <= c_sele ? 0 : DIM_NULL;
-      }
-    }
-    
-
-    // generate data for supplier table
-    if (s_bitmap)
-    {
-      for(size_t i = 0; i != size_supplier; ++i){
-        dimvec_s[i] = rand_x(0.0, 1.0) <= s_sele ? (int8_t)rand_x(0, s_groups - 1) : DIM_NULL;
-      }
-    }
-    else
-    {
-      for(size_t i = 0; i != size_supplier; ++i){
-        dimvec_s[i] = rand_x(0.0, 1.0) <= s_sele ? 0 : DIM_NULL;
-      }
-    }
-    
-
-    // generate data for part table
-    if (p_bitmap)
-    {
-      for(size_t i = 0; i != size_part; ++i){
-        dimvec_p[i] = rand_x(0.0, 1.0) <= p_sele ? (int8_t)rand_x(0, p_groups - 1) : DIM_NULL;
-      }
-    }
-    else
-    {
-      for(size_t i = 0; i != size_part; ++i){
-        dimvec_p[i] = rand_x(0.0, 1.0) <= p_sele ? 0 : DIM_NULL;
-      }
-    }
-    // generate data for date table
-    if (d_bitmap)
-    {
-      for(size_t i = 0; i != size_date; ++i){
-        dimvec_d[i] = rand_x(0.0, 1.0) <= d_sele ? (int8_t)rand_x(0, d_groups - 1) : DIM_NULL;
-      }
-    }
-    else
-    {
-      for(size_t i = 0; i != size_date; ++i){
-        dimvec_d[i] = rand_x(0.0, 1.0) <= d_sele ? 0 : DIM_NULL;
-      }
-    }
-
-    // generate data for lineorder table
-    for(size_t i = 0; i != size_lineorder; ++i){
-        fk_c[i] = rand_x(0, size_customer);
-        fk_s[i] = rand_x(0, size_supplier);
-        fk_p[i] = rand_x(0, size_part);
-        fk_d[i] = rand_x(0, size_date);
-        M1[i] = 5;
-        M2[i] = 5;
-
-    }
-
-    gettimeofday(&end, NULL);
-    //ms = calc_ms(end, start);
-    std::cout << ">>> Generated data " << size_lineorder <<  " lines in lineorder table used time " << ms << "ms." << std::endl;
+    auto tables = gen_data_arrow(c_sele, s_sele, p_sele, d_sele, SF, c_bitmap, s_bitmap, p_bitmap, d_bitmap,
+            c_groups, s_groups, p_groups, d_groups);
+    write_parquet(tables[0], "parquet/customer.parquet");
+    write_parquet(tables[1], "parquet/supplier.parquet");
+    write_parquet(tables[2], "parquet/part.parquet");
+    write_parquet(tables[3], "parquet/date.parquet");
+    write_parquet(tables[4], "parquet/lineorder.parquet");
     return 0;
+    // timeval start, end;
+    // double ms;
+    // int size_customer = size_of_table(TABLE_NAME::customer, SF);
+    // int size_supplier = size_of_table(TABLE_NAME::supplier, SF);
+    // int size_part = size_of_table(TABLE_NAME::part, SF);
+    // int size_date = size_of_table(TABLE_NAME::date, SF);
+    // dimvec_c = new int8_t[size_customer];
+    // dimvec_s = new int8_t[size_supplier];
+    // dimvec_p = new int8_t[size_part];
+    // dimvec_d = new int8_t[size_date];
+    // int size_lineorder = size_of_table(TABLE_NAME::lineorder, SF);
+    // fk_c = new int32_t[size_lineorder];
+    // fk_s = new int32_t[size_lineorder];
+    // fk_p = new int32_t[size_lineorder];
+    // fk_d = new int32_t[size_lineorder];
+    // M1 = new int32_t[size_lineorder];
+    // M2 = new int32_t[size_lineorder];
+
+
+    // gettimeofday(&start, NULL);
+    // srand(time(NULL));
+
+    // // generate data for customer table
+    // if (c_bitmap)
+    // {
+    //     for(size_t i = 0; i != size_customer; ++i){
+    //       dimvec_c[i] = rand_x(0.0, 1.0) <= c_sele ? (int8_t)rand_x(0, c_groups - 1) : DIM_NULL;
+    //   }
+    // }
+    // else
+    // {
+    //   for(size_t i = 0; i != size_customer; ++i){
+    //       dimvec_c[i] = rand_x(0.0, 1.0) <= c_sele ? 0 : DIM_NULL;
+    //   }
+    // }
+    
+
+    // // generate data for supplier table
+    // if (s_bitmap)
+    // {
+    //   for(size_t i = 0; i != size_supplier; ++i){
+    //     dimvec_s[i] = rand_x(0.0, 1.0) <= s_sele ? (int8_t)rand_x(0, s_groups - 1) : DIM_NULL;
+    //   }
+    // }
+    // else
+    // {
+    //   for(size_t i = 0; i != size_supplier; ++i){
+    //     dimvec_s[i] = rand_x(0.0, 1.0) <= s_sele ? 0 : DIM_NULL;
+    //   }
+    // }
+    
+
+    // // generate data for part table
+    // if (p_bitmap)
+    // {
+    //   for(size_t i = 0; i != size_part; ++i){
+    //     dimvec_p[i] = rand_x(0.0, 1.0) <= p_sele ? (int8_t)rand_x(0, p_groups - 1) : DIM_NULL;
+    //   }
+    // }
+    // else
+    // {
+    //   for(size_t i = 0; i != size_part; ++i){
+    //     dimvec_p[i] = rand_x(0.0, 1.0) <= p_sele ? 0 : DIM_NULL;
+    //   }
+    // }
+    // // generate data for date table
+    // if (d_bitmap)
+    // {
+    //   for(size_t i = 0; i != size_date; ++i){
+    //     dimvec_d[i] = rand_x(0.0, 1.0) <= d_sele ? (int8_t)rand_x(0, d_groups - 1) : DIM_NULL;
+    //   }
+    // }
+    // else
+    // {
+    //   for(size_t i = 0; i != size_date; ++i){
+    //     dimvec_d[i] = rand_x(0.0, 1.0) <= d_sele ? 0 : DIM_NULL;
+    //   }
+    // }
+
+    // // generate data for lineorder table
+    // for(size_t i = 0; i != size_lineorder; ++i){
+    //     fk_c[i] = rand_x(0, size_customer);
+    //     fk_s[i] = rand_x(0, size_supplier);
+    //     fk_p[i] = rand_x(0, size_part);
+    //     fk_d[i] = rand_x(0, size_date);
+    //     M1[i] = 5;
+    //     M2[i] = 5;
+
+    // }
+
+    // gettimeofday(&end, NULL);
+    // //ms = calc_ms(end, start);
+    // std::cout << ">>> Generated data " << size_lineorder <<  " lines in lineorder table used time " << ms << "ms." << std::endl;
+    // return 0;
 }
 
 /**

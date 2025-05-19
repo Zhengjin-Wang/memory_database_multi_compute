@@ -2,7 +2,7 @@ cc = g++
 nvcc = nvcc
 OBJ_DIR = ./obj
 SRC_DIR = ./code
-CFLAGS=-I./include  -L/usr/local/lib -lnuma -g  -mcmodel=large -O0 -std=c++17 -lpthread  -Wno-deprecated -mavx512bw -mavx512vl -mavx512f -mavx512cd -mavx512dq -msse -Wmultichar -mavx512vpopcntdq -mbmi -mbmi2
+CFLAGS=-I./include  -L/usr/local/lib -lnuma -g  -mcmodel=large -O0 -std=c++17 -lpthread  -Wno-deprecated -mavx512bw -mavx512vl -mavx512f -mavx512cd -mavx512dq -msse -Wmultichar -mavx512vpopcntdq -mbmi -mbmi2  -larrow -lparquet
 CUDAFLAGS=-I./include -L/usr/local/lib  -O0 -g  -std=c++11 -lnuma
 SRC_SEL = $(wildcard $(SRC_DIR)/select/*.cpp)
 OBJ_SEL = $(patsubst $(SRC_DIR)/select/%.cpp, $(OBJ_DIR)/select/%.o, $(SRC_SEL))
@@ -22,17 +22,17 @@ SRC_GPUOLAPCORE = $(wildcard $(SRC_DIR)/gpu_multi_compute_operator/*.cu)
 OBJ_GPUOLAPCORE = $(patsubst $(SRC_DIR)/gpu_multi_compute_operator/%.cu, $(OBJ_DIR)/gpu_multi_compute_operator/%.o, $(SRC_GPUOLAPCORE))
 SRC_Q5 = $(wildcard $(SRC_DIR)/final_test/*.cpp)
 OBJ_Q5 = $(patsubst $(SRC_DIR)/final_test/%.cpp, $(OBJ_DIR)/final_test/%.o, $(SRC_Q5))
-ALL : project_test
+ALL : OLAPcore
 
-project_test: $(OBJ_PRO)
+OLAPcore: $(OBJ_OLAPCORE)
 	$(cc)  $<  $(CFLAGS)  -o   $@
-$(OBJ_PRO): $(SRC_PRO)
+$(OBJ_OLAPCORE): $(SRC_OLAPCORE)
 	$(cc) -c $(CFLAGS)  $< -o $@
 
 clean:
 	rm -rf $(OBJ_SEL) $(OBJ_PRO) $(OBJ_JOIN) $(OBJ_GROUP)  $(OBJ_AGG)  $(OBJ_STARJOIN) $(OBJ_OLAPCORE) $(OBJ_Q5) select_test project_test join_test group_test starjoin_test OLAPcore GPUOLAPcore Q5
 
-run: project_test
-	./project_test
+run: OLAPcore
+	./OLAPcore --SF 1
 
 .PHONY: clean ALL

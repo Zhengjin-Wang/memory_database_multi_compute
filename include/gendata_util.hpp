@@ -199,6 +199,8 @@ inline int rand_x(int range_min, int range_max)
  * @return double the generated random number 
  */
 inline double rand_x(double min, double max ) {
+    // double a = min + static_cast <double> (rand()) / (static_cast <double> (RAND_MAX / (max - min)));
+    // std::cout <<a << std::endl;
     return min + static_cast <double> (rand()) / (static_cast <double> (RAND_MAX / (max - min)));
 }
 

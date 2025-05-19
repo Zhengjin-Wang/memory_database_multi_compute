@@ -563,7 +563,6 @@ void *OLAPcore_vwm_sv_thread(void *param)
             {
                 arg->group_vector[tmp] += arg->M1[location] + arg->M2[location];
             }
-            
 
         }
         iter++;
@@ -1895,21 +1894,21 @@ int main(int argc, char **argv)
     struct timeval start, end;
     int i, j;
     int index_num=0;
-    cmd_params.nthreads = 2;
+    cmd_params.nthreads = 96;
     cmd_params.sqlnum = 0;
-    cmd_params.sf = 0.0;
-    cmd_params.d_sele = 0.0;
-    cmd_params.d_groups = 0;
-    cmd_params.s_sele = 0.0;
-    cmd_params.s_groups = 0;
-    cmd_params.p_sele = 0.0;
-    cmd_params.p_groups = 0;
-    cmd_params.c_sele = 0.0;
-    cmd_params.c_groups = 0;
-    cmd_params.d_bitmap = 0;
-    cmd_params.s_bitmap = 0;
-    cmd_params.p_bitmap = 0;
-    cmd_params.c_bitmap = 0;
+    cmd_params.sf = 1.0;
+    cmd_params.d_sele = 0.1;
+    cmd_params.d_groups = 10;
+    cmd_params.s_sele = 0.1;
+    cmd_params.s_groups = 10;
+    cmd_params.p_sele = 0.1;
+    cmd_params.p_groups = 10;
+    cmd_params.c_sele = 0.1;
+    cmd_params.c_groups = 10;
+    cmd_params.d_bitmap = 1;
+    cmd_params.s_bitmap = 1;
+    cmd_params.p_bitmap = 1;
+    cmd_params.c_bitmap = 1;
     parse_args(argc, argv, &cmd_params);
     
     std::ofstream timefile;

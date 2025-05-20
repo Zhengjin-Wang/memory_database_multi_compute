@@ -1663,7 +1663,7 @@ void test_OLAPcore_vwm_dv_numa(double SF, double* sele_array, Dimvec_array_numa 
 void test_OLAPcore_cwm_sv(double SF, double* sele_array, int8_t **dimvec_array, int * bitmap_array, int32_t **fk_array,
                            int32_t* M1, int32_t* M2, int* factor, int* orders, int& dimvec_nums, int& group_nums, int  nthreads, int sqlnum, std::ofstream& timefile)
 {
-    std::cout << ">>> Start test OLAPcore using Column-wise model and static vector" << std::endl;
+    std::cout << ">>> Start test OLAPcore using Column-wise model and static vector arrow" << std::endl;
     timeval start, end;
     double total_rate = 1;
     for (int i = 0; i < dimvec_nums; i++)
@@ -1672,10 +1672,40 @@ void test_OLAPcore_cwm_sv(double SF, double* sele_array, int8_t **dimvec_array, 
     int16_t *groupID = (int16_t *)malloc(sizeof(int16_t) * size_lineorder);
     memset(groupID, 0 ,sizeof(int16_t) * size_lineorder);
     gettimeofday(&start, NULL);
+     for (int i = 0; i < dimvec_nums; i++)
+    {
+        auto column_id = orders[i];
+        int8_t* dimvec;
+        int32_t* fk;
+        switch(column_id){
+            case 0:
+            dimvec = (int8_t*) read_arrow_column("parquet/customer.parquet", "c_dim");
+            fk = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "fk_c");
+            break;
+            case 1:
+            dimvec = (int8_t*) read_arrow_column("parquet/supplier.parquet", "s_dim");
+            fk = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "fk_s");
+            break;
+            case 2:
+            dimvec = (int8_t*) read_arrow_column("parquet/part.parquet", "p_dim");
+            fk = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "fk_p");
+            break;
+            case 3:
+            dimvec = (int8_t*) read_arrow_column("parquet/date.parquet", "d_dim");
+            fk = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "fk_d");
+            break;
+            default:
+            break;
+        }
+        dimvec_array[column_id] = dimvec;
+        fk_array[column_id] = fk;
+    }
     join_cwm_sv(dimvec_array, fk_array, orders, dimvec_nums, groupID, factor, size_lineorder, nthreads);
     gettimeofday(&end, NULL);
     double ms_join = calc_ms(end, start);
     gettimeofday(&start, NULL);
+    M1 = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "M1");
+    M2 = (int32_t*) read_arrow_column("parquet/lineorder.parquet", "M2");
     int count = agg_cwm_sv(groupID, size_lineorder, M1, M2, group_nums, nthreads);
     gettimeofday(&end, NULL);
     double ms_agg = calc_ms(end, start);

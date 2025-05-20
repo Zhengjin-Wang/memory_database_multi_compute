@@ -318,9 +318,6 @@ void *join_cwm_sv_thread(void *param)
             
     }
     
-
-    
-
 }
 /**
  * @brief OLAPcore based on row-wise model
@@ -1897,13 +1894,13 @@ int main(int argc, char **argv)
     cmd_params.nthreads = 96;
     cmd_params.sqlnum = 0;
     cmd_params.sf = 1.0;
-    cmd_params.d_sele = 0.1;
+    cmd_params.d_sele = 0.5;
     cmd_params.d_groups = 10;
-    cmd_params.s_sele = 0.1;
+    cmd_params.s_sele = 0.5;
     cmd_params.s_groups = 10;
-    cmd_params.p_sele = 0.1;
+    cmd_params.p_sele = 0.5;
     cmd_params.p_groups = 10;
-    cmd_params.c_sele = 0.1;
+    cmd_params.c_sele = 0.5;
     cmd_params.c_groups = 10;
     cmd_params.d_bitmap = 1;
     cmd_params.s_bitmap = 1;

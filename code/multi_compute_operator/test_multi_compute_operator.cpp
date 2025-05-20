@@ -1894,14 +1894,17 @@ int main(int argc, char **argv)
     cmd_params.nthreads = 96;
     cmd_params.sqlnum = 0;
     cmd_params.sf = 1.0;
-    cmd_params.d_sele = 0.5;
+
+    cmd_params.d_sele = 0.1;
+    cmd_params.s_sele = 0.1;
+    cmd_params.p_sele = 0.1;
+    cmd_params.c_sele = 0.1;
+
     cmd_params.d_groups = 10;
-    cmd_params.s_sele = 0.5;
     cmd_params.s_groups = 10;
-    cmd_params.p_sele = 0.5;
     cmd_params.p_groups = 10;
-    cmd_params.c_sele = 0.5;
     cmd_params.c_groups = 10;
+
     cmd_params.d_bitmap = 1;
     cmd_params.s_bitmap = 1;
     cmd_params.p_bitmap = 1;
@@ -1997,65 +2000,65 @@ int main(int argc, char **argv)
     test_OLAPcore_vectorwise(cmd_params.sf, sele_array, dimvec_array, bitmap_array, fk_array,
                         M1, M2, factor, orders, dimvec_nums, group_nums, cmd_params.nthreads, cmd_params.sqlnum, timefile);
     
-    int numa_num = numa_max_node() + 1;
-    int8_t  *dimvec_c_p[numa_num], *dimvec_s_p[numa_num], *dimvec_p_p[numa_num], *dimvec_d_p[numa_num];
-    int32_t * fk_c_p[numa_num], *fk_s_p[numa_num], *fk_p_p[numa_num], *fk_d_p[numa_num];
-    int32_t * M1_p[numa_num], * M2_p[numa_num];
-    /*gen_data(cmd_params.c_sele, cmd_params.s_sele, cmd_params.p_sele, cmd_params.d_sele, cmd_params.sf, cmd_params.c_bitmap, cmd_params.s_bitmap, cmd_params.p_bitmap, cmd_params.d_bitmap,
-            cmd_params.c_groups, cmd_params.s_groups, cmd_params.p_groups, cmd_params.d_groups,
-            dimvec_c_p, dimvec_s_p, dimvec_p_p, dimvec_d_p,
-            fk_c_p, fk_s_p, fk_p_p, fk_d_p,
-            M1_p, M2_p);*/
-    Dimvec_array_numa *dimvec_array_numa = new Dimvec_array_numa[numa_num];
-    Fk_array_numa * fk_array_numa  = new Fk_array_numa[numa_num];
-    int size_customer = size_of_table(TABLE_NAME::customer, cmd_params.sf);
-    int size_supplier = size_of_table(TABLE_NAME::supplier, cmd_params.sf);
-    int size_part = size_of_table(TABLE_NAME::part, cmd_params.sf);
-    int size_date = size_of_table(TABLE_NAME::date, cmd_params.sf);
-    int size_lineorder = size_of_table(TABLE_NAME::lineorder, cmd_params.sf);
-    int *num_lineorder = new int[numa_num];
-    get_numa_info();
-    for (int i = 0; i < numa_num; i++)
-    {
-      if (i == numa_num - 1) num_lineorder[i] = size_lineorder - (numa_num - 1) * size_lineorder/numa_num;
-      else num_lineorder[i] = size_lineorder/numa_num;
-    }
-    for (int i = 0; i < numa_num; i++)
-    {
-        bind_numa(i);
-        dimvec_c_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_customer);
-        dimvec_s_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_supplier);
-        dimvec_p_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_part);
-        dimvec_d_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_date);
-        fk_c_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
-        fk_s_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
-        fk_p_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
-        fk_d_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
-        M1_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
-        M2_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    // int numa_num = numa_max_node() + 1;
+    // int8_t  *dimvec_c_p[numa_num], *dimvec_s_p[numa_num], *dimvec_p_p[numa_num], *dimvec_d_p[numa_num];
+    // int32_t * fk_c_p[numa_num], *fk_s_p[numa_num], *fk_p_p[numa_num], *fk_d_p[numa_num];
+    // int32_t * M1_p[numa_num], * M2_p[numa_num];
+    // /*gen_data(cmd_params.c_sele, cmd_params.s_sele, cmd_params.p_sele, cmd_params.d_sele, cmd_params.sf, cmd_params.c_bitmap, cmd_params.s_bitmap, cmd_params.p_bitmap, cmd_params.d_bitmap,
+    //         cmd_params.c_groups, cmd_params.s_groups, cmd_params.p_groups, cmd_params.d_groups,
+    //         dimvec_c_p, dimvec_s_p, dimvec_p_p, dimvec_d_p,
+    //         fk_c_p, fk_s_p, fk_p_p, fk_d_p,
+    //         M1_p, M2_p);*/
+    // Dimvec_array_numa *dimvec_array_numa = new Dimvec_array_numa[numa_num];
+    // Fk_array_numa * fk_array_numa  = new Fk_array_numa[numa_num];
+    // int size_customer = size_of_table(TABLE_NAME::customer, cmd_params.sf);
+    // int size_supplier = size_of_table(TABLE_NAME::supplier, cmd_params.sf);
+    // int size_part = size_of_table(TABLE_NAME::part, cmd_params.sf);
+    // int size_date = size_of_table(TABLE_NAME::date, cmd_params.sf);
+    // int size_lineorder = size_of_table(TABLE_NAME::lineorder, cmd_params.sf);
+    // int *num_lineorder = new int[numa_num];
+    // get_numa_info();
+    // for (int i = 0; i < numa_num; i++)
+    // {
+    //   if (i == numa_num - 1) num_lineorder[i] = size_lineorder - (numa_num - 1) * size_lineorder/numa_num;
+    //   else num_lineorder[i] = size_lineorder/numa_num;
+    // }
+    // for (int i = 0; i < numa_num; i++)
+    // {
+    //     bind_numa(i);
+    //     dimvec_c_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_customer);
+    //     dimvec_s_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_supplier);
+    //     dimvec_p_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_part);
+    //     dimvec_d_p[i] = (int8_t *)numa_alloc(sizeof(int8_t) * size_date);
+    //     fk_c_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    //     fk_s_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    //     fk_p_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    //     fk_d_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    //     M1_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
+    //     M2_p[i] = (int32_t *)numa_alloc(sizeof(int32_t) * num_lineorder[i]);
         
-    }
+    // }
     
-    for (int i = 0; i < numa_num; i++)
-    {
-        for (int j = 0; j < size_customer; j++)
-            dimvec_c_p[i][j] = dimvec_c[j];
-        for (int j = 0; j < size_supplier; j++)
-            dimvec_s_p[i][j] = dimvec_s[j];
-        for (int j = 0; j < size_part; j++)
-            dimvec_p_p[i][j] = dimvec_p[j];
-        for (int j = 0; j < size_date; j++)
-            dimvec_d_p[i][j] = dimvec_d[j];
-        for (int j = 0; j < num_lineorder[i]; j++)
-        {
-            fk_c_p[i][j] = fk_c[j + i * num_lineorder[0]];
-            fk_s_p[i][j] = fk_s[j + i * num_lineorder[0]];
-            fk_p_p[i][j] = fk_p[j + i * num_lineorder[0]];
-            fk_d_p[i][j] = fk_d[j + i * num_lineorder[0]];
-            M1_p[i][j] = 5;
-            M2_p[i][j] = 5;
-        }
-    }
+    // for (int i = 0; i < numa_num; i++)
+    // {
+    //     for (int j = 0; j < size_customer; j++)
+    //         dimvec_c_p[i][j] = dimvec_c[j];
+    //     for (int j = 0; j < size_supplier; j++)
+    //         dimvec_s_p[i][j] = dimvec_s[j];
+    //     for (int j = 0; j < size_part; j++)
+    //         dimvec_p_p[i][j] = dimvec_p[j];
+    //     for (int j = 0; j < size_date; j++)
+    //         dimvec_d_p[i][j] = dimvec_d[j];
+    //     for (int j = 0; j < num_lineorder[i]; j++)
+    //     {
+    //         fk_c_p[i][j] = fk_c[j + i * num_lineorder[0]];
+    //         fk_s_p[i][j] = fk_s[j + i * num_lineorder[0]];
+    //         fk_p_p[i][j] = fk_p[j + i * num_lineorder[0]];
+    //         fk_d_p[i][j] = fk_d[j + i * num_lineorder[0]];
+    //         M1_p[i][j] = 5;
+    //         M2_p[i][j] = 5;
+    //     }
+    // }
     
     delete [] dimvec_c;
     delete [] dimvec_s;

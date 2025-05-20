@@ -770,8 +770,6 @@ void *read_arrow_column(const std::string &file_path, const std::string &column_
   // 4. 通过列名查找列索引（假设列名为 "column_name"）
   int column_index = GetColumnIndexByName(*schema, column_name);
 
-  std::cout << "num_row_groups: " << parquet_reader->num_row_groups() << std::endl;
-
   std::vector<std::shared_ptr<arrow::ChunkedArray>> columns;
   for (int i = 0; i < parquet_reader->num_row_groups(); ++i)
   {
@@ -792,7 +790,7 @@ void *read_arrow_column(const std::string &file_path, const std::string &column_
       }
     }
 
-     std::cout << column_name <<", num_row_groups: " << parquet_reader->num_row_groups() << ", total_rows: " << total_rows << std::endl;
+     std::cout << "column: " << column_name <<", num_row_groups: " << parquet_reader->num_row_groups() << ", total_rows: " << total_rows << std::endl;
 
   if (schema->field(column_index)->type()->id() == arrow::Type::INT32)
   {

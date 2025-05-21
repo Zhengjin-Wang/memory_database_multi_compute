@@ -231,6 +231,9 @@ void sort_by_rate(double* sele_array, int* orders, int size) {
         }
     }
 }
+
+
+
 /**
  * @brief Join option based on column-wise model with dynamic vector
  * 
@@ -848,7 +851,9 @@ void join_cwm_dv( int8_t ** dimvec_array,
                   int * factor,
                   int * index,
                   int& size_lineorder,
-                  int nthreads)
+                  int nthreads,
+                  int32_t ** M1_array,
+                  int32_t ** M2_array)
 {
     for (int i = 0; i < dimvec_nums; i++)
     {
@@ -881,6 +886,8 @@ void join_cwm_dv( int8_t ** dimvec_array,
             argst[j].tid  = j;
             argst[j].index = & index[j];
             argst[j].join_id = i;
+            argst[j].M1 = M1_array[j];
+            argst[j].M2 = M2_array[j];
             rv = pthread_create(&tid[j], &attr, join_cwm_dv_thread, (void *)&argst[j]);
             if (rv)
             {
@@ -1505,14 +1512,18 @@ void test_OLAPcore_cwm_dv(double SF, double* sele_array, int8_t **dimvec_array, 
     int size_lineorder = size_of_table(TABLE_NAME::lineorder, SF);
     int64_t *OID[nthreads];
     int16_t *groupID[nthreads];
+    int32_t *M1_array[nthreads];
+    int32_t *M2_array[nthreads];
     for (int i = 0; i < nthreads; i++)
     {
-        OID[i] = new int64_t[size_lineorder];
-        groupID[i] = new int16_t[size_lineorder];
+        OID[i] = new int64_t[size_lineorder/nthreads + 1];
+        groupID[i] = new int16_t[size_lineorder/nthreads + 1];
+        M1_array[i] = new int32_t[size_lineorder/nthreads + 1];
+        M2_array[i] = new int32_t[size_lineorder/nthreads + 1];
     }
     int *index = new int[nthreads];
     gettimeofday(&start, NULL);
-    join_cwm_dv(dimvec_array, fk_array, orders, dimvec_nums, OID, groupID, factor, index, size_lineorder, nthreads);
+    join_cwm_dv(dimvec_array, fk_array, orders, dimvec_nums, OID, groupID, factor, index, size_lineorder, nthreads, M1_array, M2_array);
     gettimeofday(&end, NULL);
     double ms_join = calc_ms(end, start);
 

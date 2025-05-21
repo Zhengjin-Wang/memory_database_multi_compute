@@ -240,6 +240,8 @@ struct pth_cwmjoint
   int *index;
   int factor;
   int tid;
+  int32_t *M1;
+  int32_t *M2;
 };
 struct pth_cwmaggt
 {

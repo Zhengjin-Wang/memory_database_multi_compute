@@ -653,6 +653,7 @@ std::vector<std::shared_ptr<arrow::Table>> gen_data_arrow(const double &c_sele, 
   }
 
   // 生成 lineorder 表
+  auto pk = std::make_shared<arrow::Int32Builder>();
   auto fk_c = std::make_shared<arrow::Int32Builder>();
   auto fk_s = std::make_shared<arrow::Int32Builder>();
   auto fk_p = std::make_shared<arrow::Int32Builder>();
@@ -662,6 +663,7 @@ std::vector<std::shared_ptr<arrow::Table>> gen_data_arrow(const double &c_sele, 
 
   for (int i = 0; i < size_lineorder; ++i)
   {
+    pk->Append(i);
     fk_c->Append(rand_x(0, size_customer - 1));
     fk_s->Append(rand_x(0, size_supplier - 1));
     fk_p->Append(rand_x(0, size_part - 1));
@@ -677,7 +679,8 @@ std::vector<std::shared_ptr<arrow::Table>> gen_data_arrow(const double &c_sele, 
   dimvec_p->Finish(&dimvec_p_array);
   dimvec_d->Finish(&dimvec_d_array);
 
-  std::shared_ptr<arrow::Array> fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array;
+  std::shared_ptr<arrow::Array> pk_array, fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array;
+  pk->Finish(&pk_array);
   fk_c->Finish(&fk_c_array);
   fk_s->Finish(&fk_s_array);
   fk_p->Finish(&fk_p_array);
@@ -709,14 +712,15 @@ std::vector<std::shared_ptr<arrow::Table>> gen_data_arrow(const double &c_sele, 
   tables.push_back(arrow::Table::Make(date_schema, date_arrays));
 
   // lineorder 表
-  auto lineorder_schema = arrow::schema({arrow::field("fk_c", arrow::int32()),
+  auto lineorder_schema = arrow::schema({arrow::field("pk", arrow::int32()),
+                                         arrow::field("fk_c", arrow::int32()),
                                          arrow::field("fk_s", arrow::int32()),
                                          arrow::field("fk_p", arrow::int32()),
                                          arrow::field("fk_d", arrow::int32()),
                                          arrow::field("M1", arrow::int32()),
                                          arrow::field("M2", arrow::int32())});
   std::vector<std::shared_ptr<arrow::Array>> lineorder_arrays = {
-      fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array};
+      pk_array, fk_c_array, fk_s_array, fk_p_array, fk_d_array, M1_array, M2_array};
   tables.push_back(arrow::Table::Make(lineorder_schema, lineorder_arrays));
 
   return tables;
@@ -839,6 +843,60 @@ void *read_arrow_column(const std::string &file_path, const std::string &column_
   }
 
   return 0;
+}
+
+void query_parquet_with_filter(
+    const std::string& file_path,
+    const std::vector<int32_t>& pk_values) {
+
+      // 初始化Arrow内存池
+    arrow::MemoryPool *pool = arrow::default_memory_pool();
+
+    // 打开Parquet文件
+    std::shared_ptr<arrow::io::RandomAccessFile> input;
+    PARQUET_ASSIGN_OR_THROW(input, arrow::io::ReadableFile::Open(file_path, pool));
+
+    // 创建Parquet文件读取器
+    std::unique_ptr<parquet::arrow::FileReader> parquet_reader;
+    PARQUET_ASSIGN_OR_THROW(parquet_reader, parquet::arrow::OpenFile(input, pool));
+
+    // 3. 获取 Schema
+    std::shared_ptr<arrow::Schema> schema;
+    PARQUET_THROW_NOT_OK(parquet_reader->GetSchema(&schema));
+
+    // 4. 构建 Filter 表达式（pk IN (pk_values...)）
+    arrow::compute::Expression filter_expr;
+    {
+        // 创建一个 Array 用于 IN 条件
+        std::shared_ptr<arrow::Int32Array> pk_array;
+        ARROW_ASSIGN_OR_THROW(pk_array, arrow::Int32Array::FromVector(pk_values));
+
+        // 构建 IN 表达式：pk IN (pk_array)
+        arrow::compute::Datum pk_datum(pk_array);
+        filter_expr = arrow::compute::field_ref("pk")->IsIn(pk_datum);
+    }
+
+    // 5. 读取数据并应用 Filter
+    std::shared_ptr<arrow::Table> filtered_table;
+    ARROW_THROW_NOT_OK(reader->ReadTable(
+        arrow::TableReaderOptions(),
+        arrow::compute::FilterOptions::Defaults(),
+        {filter_expr},
+        &filtered_table
+    ));
+
+    // 6. 提取 M1 和 M2 列
+    auto m1_col = filtered_table->column(1);  // 假设 M1 是第 1 列
+    auto m2_col = filtered_table->column(2);  // 假设 M2 是第 2 列
+
+    // 7. 输出结果
+    auto m1_array = std::static_pointer_cast<arrow::Int32Array>(m1_col);
+    auto m2_array = std::static_pointer_cast<arrow::Int32Array>(m2_col);
+
+    for (int64_t i = 0; i < m1_array->length(); ++i) {
+        std::cout << "M1: " << m1_array->Value(i) 
+                  << ", M2: " << m2_array->Value(i) << std::endl;
+    }
 }
 
 /**

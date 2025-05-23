@@ -277,11 +277,11 @@ void *join_cwm_dv_thread(void *param)
                 arg->groupID[*(arg->index)] = arg->groupID[i] + idx_flag * arg->factor;
                 (*(arg->index))++;
             }
-            
-            
-
         }
     }
+
+    // std::vector<int32_t> my_vector(arg->OID, arg->OID + data_size);
+
 }
 /**
  * @brief Join option based on column-wise model

@@ -2,7 +2,7 @@ cc = g++
 nvcc = nvcc
 OBJ_DIR = ./obj
 SRC_DIR = ./code
-CFLAGS=-I./include  -L/usr/local/lib -lnuma -g  -mcmodel=large -O0 -std=c++17 -lpthread  -Wno-deprecated -mavx512bw -mavx512vl -mavx512f -mavx512cd -mavx512dq -msse -Wmultichar -mavx512vpopcntdq -mbmi -mbmi2  -larrow -lparquet
+CFLAGS=-I./include -lnuma -g  -mcmodel=large -O0 -std=c++17 -lpthread  -Wno-deprecated -mavx512bw -mavx512vl -mavx512f -mavx512cd -mavx512dq -msse -Wmultichar -mavx512vpopcntdq -mbmi -mbmi2  -larrow -lparquet -larrow_dataset
 CUDAFLAGS=-I./include -L/usr/local/lib  -O0 -g  -std=c++11 -lnuma
 SRC_SEL = $(wildcard $(SRC_DIR)/select/*.cpp)
 OBJ_SEL = $(patsubst $(SRC_DIR)/select/%.cpp, $(OBJ_DIR)/select/%.o, $(SRC_SEL))

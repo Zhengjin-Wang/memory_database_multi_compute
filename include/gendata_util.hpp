@@ -1,11 +1,17 @@
 #ifndef Gendata_H
 #define Gendata_H
 
+#include <arrow/filesystem/api.h>
+#include <arrow/util/logging.h>
+#include <arrow/result.h>
 #include <arrow/api.h>
 #include <arrow/table.h>
 #include <arrow/builder.h>
 #include <arrow/status.h>
 #include <arrow/io/api.h>
+#include <arrow/compute/api.h>
+#include <arrow/dataset/api.h>
+#include <arrow/dataset/file_parquet.h>
 #include <parquet/arrow/writer.h>
 #include <parquet/arrow/reader.h>
 #include "metadata.h"
@@ -845,58 +851,66 @@ void *read_arrow_column(const std::string &file_path, const std::string &column_
   return 0;
 }
 
-void query_parquet_with_filter(
-    const std::string& file_path,
-    const std::vector<int32_t>& pk_values) {
+std::shared_ptr<arrow::Table> query_parquet_with_filter(const std::string& file_path, const std::vector<int32_t>& pk_values) {
+        // 2. 将 C++ vector 转换为 Arrow Array (作为 "IN" 子句中的值集合)
+    namespace ds = arrow::dataset;
+    namespace cp = arrow::compute;
+    
+    arrow::Int32Builder builder;
+    ARROW_CHECK_OK(builder.AppendValues(pk_values));
+    std::shared_ptr<arrow::Array> filter_array;
+    ARROW_CHECK_OK(builder.Finish(&filter_array));
+    arrow::Datum filter_datum(filter_array);
+    std::vector<std::string> columns_to_read = {"M1", "M2"};
 
-      // 初始化Arrow内存池
-    arrow::MemoryPool *pool = arrow::default_memory_pool();
+    auto fs = std::make_shared<arrow::fs::LocalFileSystem>();
+    auto format = std::make_shared<arrow::dataset::ParquetFileFormat>();
+    
+    auto factory = arrow::dataset::FileSystemDatasetFactory::Make(fs, {file_path}, format, arrow::dataset::FileSystemFactoryOptions{}).ValueOrDie();
+    auto dataset = factory->Finish().ValueOrDie();
 
-    // 打开Parquet文件
-    std::shared_ptr<arrow::io::RandomAccessFile> input;
-    PARQUET_ASSIGN_OR_THROW(input, arrow::io::ReadableFile::Open(file_path, pool));
+    auto filter_expression = cp::call(
+        "is_in",
+        {cp::field_ref("pk")},
+        cp::SetLookupOptions(filter_datum, false));
 
-    // 创建Parquet文件读取器
-    std::unique_ptr<parquet::arrow::FileReader> parquet_reader;
-    PARQUET_ASSIGN_OR_THROW(parquet_reader, parquet::arrow::OpenFile(input, pool));
+     // 步骤 4: 创建扫描器 (Scanner)
+    auto scanner_builder = dataset->NewScan().ValueOrDie();
+    ARROW_CHECK_OK(scanner_builder->Project(columns_to_read));
+    ARROW_CHECK_OK(scanner_builder->Filter(filter_expression));
+    
+    auto scanner = scanner_builder->Finish().ValueOrDie();
 
-    // 3. 获取 Schema
-    std::shared_ptr<arrow::Schema> schema;
-    PARQUET_THROW_NOT_OK(parquet_reader->GetSchema(&schema));
+    // 步骤 5: 执行扫描并读取结果
+    auto table = scanner->ToTable().ValueOrDie();
 
-    // 4. 构建 Filter 表达式（pk IN (pk_values...)）
-    arrow::compute::Expression filter_expr;
-    {
-        // 创建一个 Array 用于 IN 条件
-        std::shared_ptr<arrow::Int32Array> pk_array;
-        ARROW_ASSIGN_OR_THROW(pk_array, arrow::Int32Array::FromVector(pk_values));
+    // 步骤 6: 打印结果
+    // std::cout << table->ToString() << std::endl;
+    // return table;
 
-        // 构建 IN 表达式：pk IN (pk_array)
-        arrow::compute::Datum pk_datum(pk_array);
-        filter_expr = arrow::compute::field_ref("pk")->IsIn(pk_datum);
+
+    auto m1 = table->column(0);
+    auto m2 = table->column(0);
+
+    int chunk_id = 0;
+    int chunk_offset = 0;
+    
+    while(chunk_id < m1->length()){
+      auto m1_chunk = m1->chunk(chunk_id);
+      auto m2_chunk = m2->chunk(chunk_id);
+      
+      if(chunk_offset >= m1_chunk->length()){
+        ++chunk_id;
+        chunk_offset = 0;
+        continue;
+      }
+
+      auto m1_val = std::static_pointer_cast<arrow::Int32Scalar>(*m1_chunk->GetScalar(chunk_offset))->value;
+      auto m2_val = std::static_pointer_cast<arrow::Int32Scalar>(*m2_chunk->GetScalar(chunk_offset))->value;
+      std::cout << m1_val << " " << m2_val << std::endl;
+      ++chunk_offset;
     }
 
-    // 5. 读取数据并应用 Filter
-    std::shared_ptr<arrow::Table> filtered_table;
-    ARROW_THROW_NOT_OK(reader->ReadTable(
-        arrow::TableReaderOptions(),
-        arrow::compute::FilterOptions::Defaults(),
-        {filter_expr},
-        &filtered_table
-    ));
-
-    // 6. 提取 M1 和 M2 列
-    auto m1_col = filtered_table->column(1);  // 假设 M1 是第 1 列
-    auto m2_col = filtered_table->column(2);  // 假设 M2 是第 2 列
-
-    // 7. 输出结果
-    auto m1_array = std::static_pointer_cast<arrow::Int32Array>(m1_col);
-    auto m2_array = std::static_pointer_cast<arrow::Int32Array>(m2_col);
-
-    for (int64_t i = 0; i < m1_array->length(); ++i) {
-        std::cout << "M1: " << m1_array->Value(i) 
-                  << ", M2: " << m2_array->Value(i) << std::endl;
-    }
 }
 
 /**
@@ -942,6 +956,7 @@ int gen_data(const double &c_sele, const double &s_sele, const double &p_sele, c
   write_parquet(tables[2], "parquet/part.parquet");
   write_parquet(tables[3], "parquet/date.parquet");
   write_parquet(tables[4], "parquet/lineorder.parquet");
+  query_parquet_with_filter("parquet/lineorder.parquet", {1,2});
 
   int size_customer = size_of_table(TABLE_NAME::customer, SF);
   int size_supplier = size_of_table(TABLE_NAME::supplier, SF);

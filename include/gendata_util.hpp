@@ -800,7 +800,7 @@ void *read_arrow_column(const std::string &file_path, const std::string &column_
       }
     }
 
-     std::cout << "column: " << column_name <<", num_row_groups: " << parquet_reader->num_row_groups() << ", total_rows: " << total_rows << std::endl;
+    //  std::cout << "column: " << column_name <<", num_row_groups: " << parquet_reader->num_row_groups() << ", total_rows: " << total_rows << std::endl;
 
   if (schema->field(column_index)->type()->id() == arrow::Type::INT32)
   {
@@ -886,7 +886,7 @@ std::shared_ptr<arrow::Table> query_parquet_with_filter(const std::string& file_
 
     // 步骤 6: 打印结果
     // std::cout << table->ToString() << std::endl;
-    // return table;
+    return table;
 
 
     auto m1 = table->column(0);
@@ -956,7 +956,7 @@ int gen_data(const double &c_sele, const double &s_sele, const double &p_sele, c
   write_parquet(tables[2], "parquet/part.parquet");
   write_parquet(tables[3], "parquet/date.parquet");
   write_parquet(tables[4], "parquet/lineorder.parquet");
-  query_parquet_with_filter("parquet/lineorder.parquet", {1,2});
+  // query_parquet_with_filter("parquet/lineorder.parquet", {1,2});
 
   int size_customer = size_of_table(TABLE_NAME::customer, SF);
   int size_supplier = size_of_table(TABLE_NAME::supplier, SF);

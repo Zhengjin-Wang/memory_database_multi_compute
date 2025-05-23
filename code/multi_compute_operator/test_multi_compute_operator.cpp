@@ -280,8 +280,6 @@ void *join_cwm_dv_thread(void *param)
         }
     }
 
-    // std::vector<int32_t> my_vector(arg->OID, arg->OID + data_size);
-
 }
 /**
  * @brief Join option based on column-wise model
@@ -647,13 +645,58 @@ void *OLAPcore_vwm_sv_numa_thread(void *param)
  * @return void 
  */
 void *agg_cwm_dv_thread(void *param)
-{
+{   
     pth_cwmaggt *arg = (pth_cwmaggt *)param;
+
+    std::vector<int32_t> pk_values(*(arg->index));
+    for (int i = 0; i < *(arg->index); i++)
+    {
+        pk_values[i] = arg->OID[i];
+    }
+    auto table = query_parquet_with_filter("parquet/lineorder.parquet", pk_values);
+    std::vector<int32_t> m1_vals;
+    std::vector<int32_t> m2_vals;
+    m1_vals.reserve((*(arg->index)));
+    m2_vals.reserve((*(arg->index)));
+
+    auto chunked_array = table->column(0);
+    auto chunked_array2 = table->column(1);
+
+     for (int i = 0; i < chunked_array->num_chunks(); ++i) {
+        // 获取第 i 个块
+        std::shared_ptr<arrow::Array> array_chunk = chunked_array->chunk(i);
+        std::shared_ptr<arrow::Array> array_chunk2 = chunked_array2->chunk(i);
+        // std::cout << "--- Chunk " << i << " (length: " << array_chunk->length() << ") ---" << std::endl;
+
+        // 2. 将基类 Array 向下转型为具体的 Int32Array
+        // 这是关键的类型转换步骤
+        auto int32_array = std::static_pointer_cast<arrow::Int32Array>(array_chunk);
+        auto int32_array2 = std::static_pointer_cast<arrow::Int32Array>(array_chunk2);
+
+        // 3. 遍历当前块中的所有元素
+        for (int64_t j = 0; j < int32_array->length(); ++j) {
+            // 检查值是否为 null
+            if (int32_array->IsNull(j)) {
+                // std::cout << "  Value at index " << j << " is NULL" << std::endl;
+            } else {
+                // 使用 Value() 方法获取值，它会返回 int32_t 类型
+                int32_t value = int32_array->Value(j);
+                m1_vals.push_back(value);
+                int32_t value2 = int32_array2->Value(j);
+                m2_vals.push_back(value2);
+                // std::cout << "  Value at index " << j << ": " << value << std::endl;
+            }
+        }
+    }
+
+    // std::cout << (*(arg->index)) << " " << m1_vals.size() << " " << m2_vals.size() << std::endl;
+
+
     for (int i = 0; i < *(arg->index); i++)
     {
         int16_t tmp = arg->groupID[i];
-        arg->group_vector[tmp] +=  arg->M1[arg->OID[i]] + arg->M2[arg->OID[i]];
-        
+        // arg->group_vector[tmp] +=  arg->M1[arg->OID[i]] + arg->M2[arg->OID[i]];
+        arg->group_vector[tmp] +=  m1_vals[i] + m2_vals[i];
     }
 }
 /**
